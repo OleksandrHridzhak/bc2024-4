@@ -20,9 +20,20 @@ const requestListener = async (req, res) => {
     const imgPath = path.join(cache, `${imgIndex}.jpg`);
 
     if (req.method === 'GET') {
-        
+
+
     } else if (req.method === 'PUT') {
-        
+        let body = [];
+        req.on('data', chunk => body.push(chunk));
+        req.on('end', async () => {
+            body = Buffer.concat(body);
+            
+            await fs.writeFile(imgPath, body);
+
+            res.writeHead(201);
+        });
+
+
     } else if (req.method === 'DELETE') {
         try {
             await fs.promises.unlink(filePath);
